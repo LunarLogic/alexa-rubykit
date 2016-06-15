@@ -20,6 +20,12 @@ module AlexaRubykit
       @speech
     end
 
+    def add_audio(audio_url, speech_text = "")
+      ssml = "<speak>#{speech_text} <audio src='#{audio_url}' /></speak>"
+      @speech = { :type => 'SSML', :ssml => ssml }
+      @speech
+    end
+
     def add_reprompt(speech_text)
       @reprompt = { "outputSpeech" => { :type => 'PlainText', :text => speech_text } }
       @reprompt
