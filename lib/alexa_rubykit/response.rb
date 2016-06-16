@@ -26,7 +26,7 @@ module AlexaRubykit
     end
 
     def add_audio_with_reprompt(audio_url, speech_text = "")
-      @reprompt = { :type => 'SSML', :ssml => ssml(audio_url, speech_text) }
+      @reprompt = reprompt({ :type => 'SSML', :ssml => ssml(audio_url, speech_text) })
       @reprompt
     end
 
@@ -35,8 +35,12 @@ module AlexaRubykit
     end
 
     def add_reprompt(speech_text)
-      @reprompt = { "outputSpeech" => { :type => 'PlainText', :text => speech_text } }
+      @reprompt = reprompt({ :type => 'PlainText', :text => speech_text })
       @reprompt
+    end
+
+    def reprompt(speech)
+      { outputSpeech: speech }
     end
 
     #
@@ -90,7 +94,7 @@ module AlexaRubykit
       @response = Hash.new
       @response[:outputSpeech] = @speech unless @speech.nil?
       @response[:card] = @card unless @card.nil?
-      @response[:reprompt] = @reprompt unless session_end && @reprompt.nil?
+      @response[:reprompt] = @reprompt if @reprompt && !session_end
       @response[:shouldEndSession] = session_end
       @response
     end
